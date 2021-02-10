@@ -4,6 +4,55 @@ A collection of C++ utilities.
 
 LeakCheck
 ---------
+File: [`leakcheck.h`](qtutils/leakcheck.h) [`leakcheck.cpp`](qtutils/leakcheck.cpp)<br>
+Dependency: none<br>
+License: MIT
+
+A set of tools for simple leak checking in your code by tracking instances of classes marked with macro `LEAKCHECK(YourClassName)` and reporting number of instances which have not been deleted at the exit of your program.
+
+In order to check leaks, make the following 3 changes to your code.
+
+1) Leak-checker is switched on by defining macro `LEAKCHECK_ENABLED`. This will easily allow you switching leak checking ON and OFF.
+
+2) Add macro `LEAKCHECK(YourClassName)` to a private section of all your classes whose count of instances you want to track. For example:
+```cpp
+class Widget
+{
+    LEAKCHECK(Widget);
+public:
+    // any code
+};
+```
+
+3) Move all your code from `main()` function to `do_main()` (or use a different name) and make the following form of `main()`:
+```cpp
+int main(int argc, char *argv[])
+{
+    int result = do_main(argc, argv);
+#if defined(LEAKCHECK_ENABLED)
+    LeakCheck::print_leaks();
+    if (result == 0)
+    {
+        return LeakCheck::has_leaks();
+    }
+#endif
+    return result;
+}
+```
+
+This will print the report of all leaked instances. For example if you use this code:
+```cpp
+int do_main(int argc, char *argv[])
+{
+    auto w = new Widget();
+    // oops, we forgot to delete the widget
+}
+```
+The program will print the following report:
+```
+Leak-checker leaks (type, count):
+class Widget, 1
+```
 
 Singleton
 ---------
