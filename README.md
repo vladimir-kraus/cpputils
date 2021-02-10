@@ -18,9 +18,9 @@ In order to check leaks, make the following 3 changes to your code.
 ```cpp
 class Widget
 {
-    LEAKCHECK(Widget);
+    LEAKCHECK(Widget)
 public:
-    // any code
+    // some code here ...
 };
 ```
 
@@ -45,6 +45,8 @@ This will print the report of all leaked instances. For example if you use this 
 int do_main(int argc, char *argv[])
 {
     auto w = new Widget();
+    // some code here ...
+    return 0;
     // oops, we forgot to delete the widget
 }
 ```
