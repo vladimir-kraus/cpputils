@@ -55,6 +55,7 @@ The program will print the following report:
 Leak-checker leaks (type, count):
 class Widget, 1
 ```
+There are two obvious drawbacks of this tool. Firstly it does not catch leaks of objects which do not have ```LEAKCHECK``` macro in their class definition. This is a matter of fact and it cannot be overcome. And secondly, it does not report at which place in code the leaked object was instantiated. All it shows, is the type of the object. However this is not a big problem in practice. If you develop in small incremental steps and you test often, it is easy to have leak-checking switched ON and you can quickly spot which change in your program introduced the leak. On the other hand, this is much more complicated when you come a to large and leaking code base and you want to find the leaks. In that case it is better to use some other leak checking tools.
 
 Singleton
 ---------
