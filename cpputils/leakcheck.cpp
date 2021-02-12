@@ -5,11 +5,11 @@
 #include <cassert>
 #include <iostream>
 
-std::map<std::string, LeakChecker::Entry> LeakChecker::s_stats;
+std::map<std::string, LeakCheck::Entry> LeakCheck::s_stats;
 
-std::mutex LeakChecker::s_mutex;
+std::mutex LeakCheck::s_mutex;
 
-void LeakChecker::update(const char *typeName, int increment)
+void LeakCheck::update(const char *typeName, int increment)
 {
     assert(increment == 1 || increment == -1);
 
@@ -31,7 +31,7 @@ void LeakChecker::update(const char *typeName, int increment)
     }
 }
 
-void LeakChecker::print_leaks()
+void LeakCheck::print_leaks()
 {
     const std::lock_guard<std::mutex> lock(s_mutex);
 
@@ -59,7 +59,7 @@ void LeakChecker::print_leaks()
     std::cout << std::endl;
 }
 
-void LeakChecker::print_stats()
+void LeakCheck::print_stats()
 {
     const std::lock_guard<std::mutex> lock(s_mutex);
 
@@ -73,7 +73,7 @@ void LeakChecker::print_stats()
     std::cout << std::endl;
 }
 
-bool LeakChecker::has_leaks()
+bool LeakCheck::has_leaks()
 {
     for (const auto & kv : s_stats)
     {
