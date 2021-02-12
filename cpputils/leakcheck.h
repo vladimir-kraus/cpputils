@@ -68,6 +68,16 @@ public:
      */
     static bool has_leaks();
 
+    /**
+     * @brief Returns the current number of instances of class T.
+     */
+    template <typename T>
+    static long instance_count()
+    {
+        const std::lock_guard<std::mutex> lock(s_mutex);
+        return s_stats[std::string(typeid(T).name())].count;
+    }
+
 protected:
     static void update(const char *typeName, int increment);
 
